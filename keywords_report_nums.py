@@ -81,12 +81,19 @@ def extract_report_nums(res):
 
 if __name__ == '__main__':
     keywords = '杨浦 创业'
-    with open('杨浦_创业.csv','w',encoding='gbk') as file:
+    with open('杨浦+创业 按月获取网页报道数量 2017-04-21.csv','w',encoding='gbk',newline='') as file:
         writer = csv.writer(file)
-        writer.writerow('%s,%s,%s,%s'%('关键词','开始时间','结束时间','网页报道量'))
-
+        writer.writerow(('ID','关键词','开始时间','结束时间','网页报道量','对应地址'))
         date_range_zip = gen_dates_lst()
-        for date_range in date_range_zip:
-            res = get_pages(keywords,date_range)
-            report_nums = extract_report_nums(res)
-            writer.writerow('%s,%s,%s,%s'%(keywords,date_range[0],date_range[1],report_nums))
+
+        for id,date_range in enumerate(date_range_zip):
+            try:
+                res = get_pages(keywords,date_range)
+            except Exception as e:
+                print(e)
+            else:
+                report_nums = extract_report_nums(res)
+                writer.writerow((id+1,keywords,date_range[0],date_range[1],report_nums,res.url))
+                print(id+1,keywords,date_range[0],date_range[1],report_nums,res.url)
+            finally:
+                time.sleep(2)
