@@ -79,7 +79,7 @@ class NetReportsCrawler(object):
                     report_nums,res.url
                 )
                 csvwriter.writerow(write_info)
-                print(sampleid+1,monthid+1)
+                print(sampleid+1,monthid+1,keywords,report_nums)
         csvfile.close()
 
 
