@@ -6,17 +6,6 @@ import requests
 import time
 from lxml import etree
 
-from_date_lst = []
-for year in range(2013,2018):
-    for month in range(1,13):
-        if month<10:
-            date = str(year)+'-0'+str(month)+'-01'
-        else:
-            date = str(year)+'-'+str(month)+'-01'
-        if date>str(datetime.datetime.now()):
-            break
-        from_date_lst.append(date)
-
 def text_stamp(text_date):
     return int(time.mktime(time.strptime(text_date, "%Y-%m-%d")))
 
@@ -75,9 +64,8 @@ def get_pages(keywords,date_range):
 def extract_report_nums(res):
     selector = etree.HTML(res.text)
     content = selector.xpath('//*[@id="container"]/div[2]/div/div[2]/text()')[0]
-    report_nums = re.search('\d+',content)
-
-    return report_nums.group()
+    report_nums = re.findall('约(.*?)个',content)
+    return report_nums[0]
 
 if __name__ == '__main__':
     keywords = '杨浦 创业'
