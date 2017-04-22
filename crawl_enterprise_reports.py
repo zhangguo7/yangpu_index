@@ -8,7 +8,7 @@ import time
 from lxml import etree
 
 class NetReportsCrawler(object):
-
+    """网页报道量抓取"""
     def __init__(self,keywords):
         self.keywords = keywords
 
@@ -53,13 +53,14 @@ class NetReportsCrawler(object):
         return res
 
     def extract_report_nums(self,res):
+        """抽取报道数量"""
         selector = etree.HTML(res.text)
         content = selector.xpath('//*[@id="container"]/div[2]/div/div[2]/text()')[0]
         report_nums = re.findall('约(.*?)个', content)
         return report_nums[0]
 
     def do_crawl(self,keywords,start_lst,end_lst,csv_filename,sampleid):
-
+        """执行爬虫并写入csv文件"""
         csvfile = open(csv_filename, 'a', encoding='gbk', newline='')
         csvwriter = csv.writer(csvfile)
 
@@ -81,7 +82,6 @@ class NetReportsCrawler(object):
                 csvwriter.writerow(write_info)
                 print(sampleid+1,monthid+1,keywords,report_nums)
         csvfile.close()
-
 
 def gen_dates_lst():
     from_date_lst = []
